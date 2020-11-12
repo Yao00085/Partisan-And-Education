@@ -81,7 +81,7 @@ Alt and Lowry show that divided government are less responsive to actual revenue
 
 I want to explore that if the different partisan composition of state have an impact on the local educational outcome. To consider the educational outcome, the data should be collected from a wide range from the resources. 
 
-```{r results = 'hide'}
+```{r results = 'hide', include = F}
 library(gridExtra)
 library(dplyr)
 library(GGally)
@@ -265,7 +265,7 @@ edu_2019 <- read.csv("usgs_state_2019.csv");edu_2020 <- read.csv("usgs_state_202
 col_name <- c("State","state_spending","local_spending","StateAndLocalSpending")
 ```
 
-```{r results = 'hide'}
+```{r results = 'hide', include = F}
 clean_edu_data = function(data){
     setnames(data, c(2), c("state_spending"))
     newdata <- data[-c(which(is.na(as.numeric(data$state_spending)))),]
@@ -356,10 +356,13 @@ hc_add_series(name = "Washington",xts_edu_spending$Washington) %>%
 
 ```
 
-```{r}
+```{r, incldue = F}
 library(reshape2)
 library(corrplot)
 library(corrr)
+```
+
+```{r}
 rep <- cbind(xts_edu_spending$Alabama,xts_edu_spending$Arizona,
              xts_edu_spending$Florida,xts_edu_spending$Georgia)
 dem <- cbind(xts_edu_spending$California,xts_edu_spending$Delaware,
@@ -388,10 +391,9 @@ corr_simple <- function(data=df,sig=0.8){
   #plot correlations visually
   #corrplot(mtx_corr, is.corr=FALSE, tl.col="black", na.label=" ")
 }
-corr_simple(cor_dec)
+#corr_simple(cor_dec)
 
 cor_dec %>% correlate() %>% network_plot(min_cor=0.8, colors = c("red", "green","blue","yellow"), legend = TRUE)
-?correlate
 ```
 
 

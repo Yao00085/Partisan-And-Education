@@ -81,7 +81,7 @@ Alt and Lowry show that divided government are less responsive to actual revenue
 
 I want to explore that if the different partisan composition of state have an impact on the local educational outcome. To consider the educational outcome, the data should be collected from a wide range from the resources. 
 
-```{r results = 'hide', eval = FALSE}
+```{r results = 'hide'}
 library(gridExtra)
 library(dplyr)
 library(GGally)
@@ -153,58 +153,58 @@ Plot the state of state partisan map from 2010 to 2020
 
 
 ```{r results = 'hide'}
-us_states <- map_data("state")
-gov_com$region <- tolower(gov_com$State)
-gov_com_region <- left_join(us_states, gov_com)
+# us_states <- map_data("state")
+# gov_com$region <- tolower(gov_com$State)
+# gov_com_region <- left_join(us_states, gov_com)
 
 ```
 
 ```{r}
-scale <- levels(gov_com_region[,8])
-labels_scale <- rev(scale)
-
-
-plot_state_composite = function (data, column) {
-  ggplot() +
-    geom_polygon(data = data, aes(fill = data[,column], 
-                                  x = long, 
-                                  y = lat, 
-                                  group = group)) +
-    geom_path(data = data, aes(x = long, 
-                               y = lat, 
-                               group = group), 
-              color = "white", size = 0.1) +
-    coord_equal() +
-    theme_map() +
-    theme(legend.position = "bottom") +
-    labs(x = NULL, 
-         y = NULL, 
-         title = "Party of each state", 
-         subtitle = colnames(data[column]), 
-         caption = "Source: ",
-         size = 0.5) +
-    scale_fill_manual(
-      values = rev(magma(7)),
-      name = "State Party",
-      drop = FALSE,
-      labels = labels_scale,
-      guide = guide_legend(
-        direction = "horizontal",
-        keyheight = unit(2, units = "mm"),
-        keywidth = unit(10 / length(labels), units = "mm"),
-        title.position = 'top',
-        title.hjust = 0.5,
-        label.hjust = 1,
-        label.vjust = 0.5,
-        nrow = 1,
-        byrow = T,
-        # also the guide needs to be reversed
-        reverse = T,
-        label.position = "bottom"
-      )
-    ) 
-}
- myplots <- lapply(colnames(gov_com_region)[8:ncol(gov_com_region)], plot_state_composite, data = gov_com_region)
+# scale <- levels(gov_com_region[,8])
+# labels_scale <- rev(scale)
+# 
+# 
+# plot_state_composite = function (data, column) {
+#   ggplot() +
+#     geom_polygon(data = data, aes(fill = data[,column], 
+#                                   x = long, 
+#                                   y = lat, 
+#                                   group = group)) +
+#     geom_path(data = data, aes(x = long, 
+#                                y = lat, 
+#                                group = group), 
+#               color = "white", size = 0.1) +
+#     coord_equal() +
+#     theme_map() +
+#     theme(legend.position = "bottom") +
+#     labs(x = NULL, 
+#          y = NULL, 
+#          title = "Party of each state", 
+#          subtitle = colnames(data[column]), 
+#          caption = "Source: ",
+#          size = 0.5) +
+#     scale_fill_manual(
+#       values = rev(magma(7)),
+#       name = "State Party",
+#       drop = FALSE,
+#       labels = labels_scale,
+#       guide = guide_legend(
+#         direction = "horizontal",
+#         keyheight = unit(2, units = "mm"),
+#         keywidth = unit(10 / length(labels), units = "mm"),
+#         title.position = 'top',
+#         title.hjust = 0.5,
+#         label.hjust = 1,
+#         label.vjust = 0.5,
+#         nrow = 1,
+#         byrow = T,
+#         # also the guide needs to be reversed
+#         reverse = T,
+#         label.position = "bottom"
+#       )
+#     ) 
+# }
+#  myplots <- lapply(colnames(gov_com_region)[8:ncol(gov_com_region)], plot_state_composite, data = gov_com_region)
 ```
 
 
@@ -245,7 +245,7 @@ animation::saveGIF(
 )
 ```
 
-!["State parisan control"](FileName.gif)
+!["State parisan control"](Map.gif)
 
 
 A look into the data we need:
@@ -281,9 +281,9 @@ new_2013 <- clean_edu_data(edu_2013)[,c(1:4)];new_2014 <- clean_edu_data(edu_201
 new_2016 <- clean_edu_data(edu_2016)[,c(1:4)];new_2017 <- clean_edu_data(edu_2017)[,c(1:4)];new_2018 <- clean_edu_data(edu_2018)[,c(1:4)]
 new_2019 <- clean_edu_data(edu_2019)[,c(1:4)];new_2020 <- clean_edu_data(edu_2020)[,c(1:4)]
 
-setnames(new_2010,col_name);setnames(new_2011,col_name);setnames(new_2012,col_name);setnames(new_2013,col_name)
-setnames(new_2014,col_name);setnames(new_2015,col_name);setnames(new_2016,col_name);setnames(new_2017,col_name)
-setnames(new_2018,col_name);setnames(new_2019,col_name);setnames(new_2020,col_name)
+data.table::setnames(new_2010,col_name);data.table::setnames(new_2011,col_name);data.table::setnames(new_2012,col_name);setnames(new_2013,col_name)
+data.table::setnames(new_2014,col_name);data.table::setnames(new_2015,col_name);data.table::setnames(new_2016,col_name);setnames(new_2017,col_name)
+data.table::setnames(new_2018,col_name);data.table::setnames(new_2019,col_name);data.table::setnames(new_2020,col_name)
 
 new_2010<-subset(new_2010, State!="All states combined" & State!="District of Columbia")
 new_2011<-subset(new_2011, State!="All states combined" & State!="District of Columbia")
@@ -415,6 +415,8 @@ plot_dem <- ggcorr(dem, geom = "blank", label = TRUE, hjust = 0.75,label_round =
 
  grid.arrange(plot_dem, plot_rep, ncol=2)
 ```
-For the year 2010-2020. I select 4 states of democratic(Alabama, 10 years; Arizona, 11 years; Florida, 11 years; Georgia, 11years) and select 4 states of republican(California, 11 years; Delaware, 11 years; Hawaii, 10 years; Washington, 9 years). "year" means how many years of controled by selected party during 11 years. The figure shows the correlation matrix of their spending over the 11 years. It is appearant that the correlation of the spending for republican is very high, in contrast, the correlation of 4 democratic states is low, except the correlation between Washington and California. 
+For the year 2010-2020. I select 4 states of democratic(Alabama, 10 years; Arizona, 11 years; Florida, 11 years; Georgia, 11years) and select 4 states of republican(California, 11 years; Delaware, 11 years; Hawaii, 10 years; Washington, 9 years). "year" means how many years of controled by selected party during 11 years. The figure shows the correlation matrix of their spending over the 11 years. It is appearant that the correlation of the spending for republican is very high, in contrast, the correlation of 4 democratic states is low, except the correlation between Washington and California.
+
+Continue here
 
 
